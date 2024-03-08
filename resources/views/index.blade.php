@@ -5,7 +5,7 @@
         <div class="flex text-gray-100 pt-10">
             <div class="m-auto pt-4 pb-16 sm:m-auto w-4/5 block text-center">
                 <h1 class="sm:text-white text-5xl uppercase font-bold text-shadow-md pb-14">
-                    Do you want to become a developer?
+                    Discover Exciting Places to Travel and Explore
                 </h1>
                 <a 
                     href="/blog"
@@ -23,15 +23,15 @@
 
         <div class="m-auto sm:m-auto text-left w-4/5 block">
             <h2 class="text-3xl font-extrabold text-gray-600">
-                Struggling to be a better web developer?
+                Explore New Destinations and Hidden Gems
             </h2>
             
             <p class="py-8 text-gray-500 text-s">
-                Lorem, ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus.
+                Dive into captivating travel guides, recommendations, and insider tips to plan your next unforgettable adventure.
             </p>
 
             <p class="font-extrabold text-gray-600 text-s pb-9">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sapiente magnam vero nostrum! Perferendis eos molestias porro vero. Vel alias.
+                Join us on a journey to uncover breathtaking landscapes, vibrant cultures, and thrilling experiences around the world.
             </p>
 
             <a 
@@ -48,16 +48,16 @@
         </h2>
 
         <span class="font-extrabold block text-4xl py-1">
-            Ux Design
+            Adventure Travel
         </span>
         <span class="font-extrabold block text-4xl py-1">
-            Project Management
+            Cultural Exploration
         </span>
         <span class="font-extrabold block text-4xl py-1">
-            Digital Strategy
+            Off-the-Beaten-Path Destinations
         </span>
         <span class="font-extrabold block text-4xl py-1">
-            Backend Development
+            Local Experiences
         </span>
     </div>
 
@@ -67,11 +67,11 @@
         </span>
 
         <h2 class="text-4xl font-bold py-10">
-            Recent Posts
+            Discover New Places
         </h2>
 
         <p class="m-auto w-4/5 text-gray-500">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Cumque exercitationem saepe enim veritatis, eos temporibus quaerat facere consectetur qui.
+            Delve into our collection of travel articles highlighting must-visit destinations, hidden gems, and insider recommendations.
         </p>
     </div>
 
@@ -79,11 +79,11 @@
         <div class="flex bg-yellow-700 text-gray-100 pt-10">
             <div class="m-auto pt-4 pb-16 sm:m-auto w-4/5 block">
                 <span class="uppercase text-xs">
-                    PHP
+                    City Breaks
                 </span>
 
                 <h3 class="text-xl font-bold py-10">
-                    Lorem ipsum dolor, sit amet consectetur adipisicing elit. Voluptas necessitatibus dolorum error culpa laboriosam. Enim voluptas earum repudiandae consequuntur ad? Expedita labore aspernatur facilis quasi ex? Nemo hic placeat et?
+                    Embark on urban adventures and discover the vibrant culture, history, and attractions of bustling cities around the globe.
                 </h3>
 
                 <a 
