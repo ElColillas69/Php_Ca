@@ -66,22 +66,22 @@
             <ul class="py-4 sm:text-s pt-4 text-gray-400">
                 <li class="pb-1">
                     <a href="/">
-                        Why we love tech
+                        Why we love travelling
                     </a>
                 </li>
                 <li class="pb-1">
                     <a href="/">
-                        Why we love design
+                        Why we love the world
                     </a>
                 </li>
                 <li class="pb-1">
                     <a href="/">
-                        Why to use Laravel
+                        Why to use Planes
                     </a>
                 </li>
                 <li class="pb-1">
                     <a href="/">
-                        Why PHP is the best
+                        Why Ryanair is the best
                     </a>
                 </li>
             </ul>

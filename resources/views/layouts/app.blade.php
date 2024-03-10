@@ -3,9 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="description" content="Your website description">
+    <meta name="keywords" content="keyword1, keyword2, keyword3">
+    <meta name="author" content="Your Name">
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
@@ -24,7 +25,7 @@
                         {{ config('app.name', 'Laravel') }}
                     </a>
                 </div>
-                <nav class="space-x-4 text-gray-300 text-sm sm:text-base">
+                <nav class="space-x-4 text-gray-300 text-sm sm:text-base" aria-label="Main Navigation">
                     <a class="no-underline hover:underline" href="/">Home</a>
                     <a class="no-underline hover:underline" href="/blog">Blog</a>
                     @guest
@@ -51,9 +52,9 @@
             @yield('content')
         </div>
 
-        <div>
+        <footer>
             @include('layouts.footer')
-        </div>
+        </footer>
     </div>
 </body>
 </html>
