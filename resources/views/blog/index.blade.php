@@ -30,7 +30,9 @@
 @foreach ($posts as $post)
     <div class="sm:grid grid-cols-2 gap-20 w-4/5 mx-auto py-15 border-b border-gray-200">
         <div>
-            <img src="{{ asset('images/' . $post->image_path) }}" alt="">
+            @if ($post->image_path)
+                <img src="{{ asset('images/' . $post->image_path) }}" alt="{{ $post->title }}" class="w-full">
+            @endif
         </div>
         <div>
             <h2 class="text-gray-700 font-bold text-5xl pb-4">
@@ -59,7 +61,7 @@
                 </span>
 
                 <span class="float-right">
-                     <form 
+                    <form 
                         action="/blog/{{ $post->slug }}"
                         method="POST">
                         @csrf
@@ -70,7 +72,6 @@
                             type="submit">
                             Delete
                         </button>
-
                     </form>
                 </span>
             @endif

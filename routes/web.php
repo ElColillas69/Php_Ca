@@ -23,3 +23,11 @@ Auth::routes();
 
 Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
+Route::get('/blog/articles', [BlogArticlesController::class, 'index']);
+Route::get('/blog/articles/{id}', [BlogArticlesController::class, 'show']);
+Route::get('/blog/articles/create', [BlogArticlesController::class, 'create']);
+Route::post('/blog/articles', [BlogArticlesController::class, 'store']);
+Route::get('/blog/articles/{id}/edit', [BlogArticlesController::class, 'edit']);
+Route::put('/blog/articles/{id}', [BlogArticlesController::class, 'update']);
+Route::delete('/blog/articles/{id}', [BlogArticlesController::class, 'destroy']);
+

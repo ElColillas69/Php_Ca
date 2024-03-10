@@ -39,24 +39,54 @@
             placeholder="Description..."
             class="py-20 bg-transparent block border-b-2 w-full h-60 text-xl outline-none"></textarea>
 
-        <div class="bg-grey-lighter pt-15">
-            <label class="w-44 flex flex-col items-center px-2 py-3 bg-white-rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer">
-                <span class="mt-2 text-base leading-normal">
-                    Select a file
-                </span>
+        <div class="flex flex-col space-y-4">
+            <div>
                 <input 
-                    type="file"
-                    name="image"
-                    class="hidden">
-            </label>
+                    type="text"
+                    name="article_titles[]"
+                    placeholder="Article Title..."
+                    class="bg-transparent block border-b-2 w-full h-16 text-3xl outline-none">
+                <textarea 
+                    name="article_descriptions[]"
+                    placeholder="Article Description..."
+                    class="py-10 bg-transparent block border-b-2 w-full h-40 text-lg outline-none"></textarea>
+            </div>
         </div>
+
+        <button    
+            id="add-article"
+            type="button"
+            class="uppercase mt-15 bg-blue-500 text-gray-100 text-lg font-extrabold py-4 px-8 rounded-3xl">
+            Add Article
+        </button>
 
         <button    
             type="submit"
             class="uppercase mt-15 bg-blue-500 text-gray-100 text-lg font-extrabold py-4 px-8 rounded-3xl">
-            Submit Post
+            Create Post
         </button>
     </form>
 </div>
+
+<script>
+    document.getElementById('add-article').addEventListener('click', function() {
+        var articlesContainer = document.querySelector('.flex.flex-col.space-y-4');
+        var newArticle = document.createElement('div');
+        newArticle.innerHTML = `
+            <div>
+                <input 
+                    type="text"
+                    name="article_titles[]"
+                    placeholder="Article Title..."
+                    class="bg-transparent block border-b-2 w-full h-16 text-3xl outline-none">
+                <textarea 
+                    name="article_descriptions[]"
+                    placeholder="Article Description..."
+                    class="py-10 bg-transparent block border-b-2 w-full h-40 text-lg outline-none"></textarea>
+            </div>
+        `;
+        articlesContainer.appendChild(newArticle);
+    });
+</script>
 
 @endsection
