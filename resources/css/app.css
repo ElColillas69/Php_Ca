@@ -13,3 +13,102 @@
     background-size: cover;
     height: 600px;
 }
+body {
+    font-family: 'Nunito', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: bold;
+}
+
+h1 {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+h2 {
+    font-size: 2rem;
+    margin-bottom: 0.8rem;
+}
+
+h3 {
+    font-size: 1.75rem;
+    margin-bottom: 0.6rem;
+}
+
+h4 {
+    font-size: 1.5rem;
+    margin-bottom: 0.4rem;
+}
+
+p {
+    margin-bottom: 1.2rem;
+}
+
+header {
+    background-color: #2b6cb0;
+    color: #ffffff;
+}
+
+header a {
+    color: #ffffff;
+}
+
+nav a {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+nav a:hover {
+    color: #93c5fd;
+}
+
+main {
+    padding: 2rem 0;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+    width: 100%;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 0.25rem;
+}
+
+input[type="checkbox"] {
+    margin-right: 0.5rem;
+}
+
+button {
+    display: inline-block;
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #4c51bf;
+    color: #ffffff;
+}
+
+footer {
+    background-color: #2b6cb0;
+    color: #ffffff;
+    padding: 2rem 0;
+}
+
+footer a {
+    color: #ffffff;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: #93c5fd;
+}
