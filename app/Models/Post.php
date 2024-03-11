@@ -27,7 +27,9 @@ class Post extends Model
         ];
     }
     public function articles()
-    {
-        return $this->hasMany(Article::class);
-    }
+{
+    return $this->hasMany(\App\Models\Articles::class, 'id');
+}
+   
+
 }
