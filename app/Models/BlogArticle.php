@@ -13,4 +13,8 @@ class BlogArticle extends Model
         'title',
         'content'
     ];
+    public function post()
+    {
+        return $this->belongsTo(Post::class);
+    }
 }

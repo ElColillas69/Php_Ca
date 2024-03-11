@@ -71,10 +71,11 @@ class PostsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function show($slug)
-    {
-        return view('blog.show')
-            ->with('post', Post::where('slug', $slug)->first());
-    }
+{
+    $post = Post::where('slug', $slug)->firstOrFail();
+    $articles = $post->articles; 
+    return view('blog.show', compact('post', 'articles'));
+}
 
     /**
      * Show the form for editing the specified resource.

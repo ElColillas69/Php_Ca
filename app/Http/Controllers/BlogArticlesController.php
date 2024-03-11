@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\BlogArticle;
+use App\Models\Post; 
 
 class BlogArticleController extends Controller
 {
@@ -23,17 +24,24 @@ class BlogArticleController extends Controller
         $request->validate([
             'title' => 'required',
             'content' => 'required',
+            'post_id' => 'required|exists:posts,id', 
         ]);
 
-        BlogArticle::create($request->all());
+        $article = new BlogArticle();
+        $article->title = $request->title;
+        $article->content = $request->content;
+        $article->post_id = $request->post_id; 
+        $article->save();
 
         return redirect()->route('articles.index')
             ->with('success', 'Article created successfully.');
     }
 
-    public function show(BlogArticle $article)
+    public function show($id)
     {
-        return view('blog.show', compact('article'));
+        $post = Post::findOrFail($id);
+        $articles = Article::where('post_id', $post->id)->get();
+        return view('post.show', compact('post', 'articles'));
     }
 
     public function edit(BlogArticle $article)

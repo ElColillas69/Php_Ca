@@ -27,10 +27,10 @@
                 </div>
                 <div class="w-4/5 m-auto pt-10">
                     <h2 class="text-3xl font-bold mb-4">Articles in this blog:</h2>
-                    @if ($post->articles->isEmpty())
+                    @if ($articles->isEmpty())
                         <p>No articles found in this blog.</p>
                     @else
-                        @foreach ($post->articles as $article)
+                        @foreach ($articles as $article)
                             <div class="border border-gray-200 rounded-md p-4 mb-4">
                                 <h3 class="text-xl font-bold mb-2">{{ $article->title }}</h3>
                                 <p class="text-gray-700">{{ $article->description }}</p>
