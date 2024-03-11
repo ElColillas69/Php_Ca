@@ -43,8 +43,8 @@
         <div class="mt-8">
             <h2 class="text-3xl font-bold mb-4">Edit Articles</h2>
             <div class="flex flex-col space-y-4">
-                @if($post->blog_articles)
-                    @foreach($post->blog_articles as $article)
+                @if($post->articles)
+                    @foreach($post->articles as $article)
                     <div>
                         <input 
                             type="text"

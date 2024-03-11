@@ -3,34 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\BlogArticle;
-use App\Models\Post; 
+use App\Models\Article;
+use App\Models\Post;
 
 class BlogArticleController extends Controller
 {
     public function index()
     {
-        $articles = BlogArticle::all();
+        $articles = Article::all();
         return view('blog.index', compact('articles'));
     }
 
     public function create()
     {
-        return view('blog.create');
+        $posts = Post::all(); 
+        return view('blog.create', compact('posts'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
             'title' => 'required',
-            'content' => 'required',
-            'post_id' => 'required|exists:posts,id', 
+            'description' => 'required',
+            'id' => 'required|exists:posts,id',
         ]);
 
-        $article = new BlogArticle();
+        $article = new Article();
         $article->title = $request->title;
-        $article->content = $request->content;
-        $article->post_id = $request->post_id; 
+        $article->description = $request->description;
+        $article->id = $request->id;
         $article->save();
 
         return redirect()->route('articles.index')
@@ -40,20 +41,20 @@ class BlogArticleController extends Controller
     public function show($id)
     {
         $post = Post::findOrFail($id);
-        $articles = Article::where('post_id', $post->id)->get();
+        $articles = $post->articles; 
         return view('post.show', compact('post', 'articles'));
     }
 
-    public function edit(BlogArticle $article)
+    public function edit(Article $article)
     {
         return view('blog.edit', compact('article'));
     }
 
-    public function update(Request $request, BlogArticle $article)
+    public function update(Request $request, Article $article)
     {
         $request->validate([
             'title' => 'required',
-            'content' => 'required',
+            'description' => 'required',
         ]);
 
         $article->update($request->all());
@@ -62,7 +63,7 @@ class BlogArticleController extends Controller
             ->with('success', 'Article updated successfully');
     }
 
-    public function destroy(BlogArticle $article)
+    public function destroy(Article $article)
     {
         $article->delete();
 
