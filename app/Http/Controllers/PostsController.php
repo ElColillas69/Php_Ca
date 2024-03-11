@@ -4,42 +4,25 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
-use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class PostsController extends Controller
 {
- 
     public function __construct()
     {
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
         return view('blog.index')
             ->with('posts', Post::orderBy('updated_at', 'DESC')->get());
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('blog.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
         $request->validate([
@@ -55,7 +38,7 @@ class PostsController extends Controller
         Post::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'slug' => SlugService::createSlug(Post::class, 'slug', $request->title),
+            'slug' => \Str::slug($request->title), // Generate slug using Laravel helper
             'image_path' => $newImageName,
             'user_id' => auth()->user()->id
         ]);
@@ -64,38 +47,19 @@ class PostsController extends Controller
             ->with('message', 'Your post has been added!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  string  $slug
-     * @return \Illuminate\Http\Response
-     */
     public function show($slug)
-{
-    $post = Post::where('slug', $slug)->firstOrFail();
-    $articles = $post->articles; 
-    return view('blog.show', compact('post', 'articles'));
-}
+    {
+        $post = Post::where('slug', $slug)->firstOrFail();
+        $articles = $post->articles;
+        return view('blog.show', compact('post', 'articles'));
+    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  string  $slug
-     * @return \Illuminate\Http\Response
-     */
     public function edit($slug)
     {
         return view('blog.edit')
             ->with('post', Post::where('slug', $slug)->first());
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  string  $slug
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $slug)
     {
         $request->validate([
@@ -107,7 +71,7 @@ class PostsController extends Controller
             ->update([
                 'title' => $request->input('title'),
                 'description' => $request->input('description'),
-                'slug' => SlugService::createSlug(Post::class, 'slug', $request->title),
+                'slug' => \Str::slug($request->title), 
                 'user_id' => auth()->user()->id
             ]);
 
@@ -115,12 +79,6 @@ class PostsController extends Controller
             ->with('message', 'Your post has been updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($slug)
     {
         $post = Post::where('slug', $slug);
@@ -130,4 +88,3 @@ class PostsController extends Controller
             ->with('message', 'Your post has been deleted!');
     }
 }
-

@@ -12,12 +12,11 @@ class AddTypeToPostsTable extends Migration
      * @return void
      */
     public function up()
-{
-    Schema::table('posts', function (Blueprint $table) {
-        $table->string('type')->default('post')->after('description');
-    });
-}
-
+    {
+        Schema::table('posts', function (Blueprint $table) {
+            $table->string('type')->default('post')->after('description');
+        });
+    }
 
     /**
      * Reverse the migrations.
@@ -25,10 +24,11 @@ class AddTypeToPostsTable extends Migration
      * @return void
      */
     public function down()
-{
-    Schema::table('posts', function (Blueprint $table) {
-        $table->dropColumn('type');
-    });
-}
+    {
+        Schema::table('posts', function (Blueprint $table) {
+            $table->dropColumn('type');
+        });
 
+        Schema::dropIfExists('posts');
+    }
 }

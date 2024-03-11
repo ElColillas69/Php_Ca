@@ -42,7 +42,7 @@
 
         <div class="mt-8">
             <h2 class="text-3xl font-bold mb-4">Edit Articles</h2>
-            <div class="flex flex-col space-y-4">
+            <div class="flex flex-col space-y-4" id="articles-container">
                 @if($post->articles)
                     @foreach($post->articles as $article)
                     <div>
@@ -74,7 +74,7 @@
 
 <script>
     document.getElementById('add-article').addEventListener('click', function() {
-        var articlesContainer = document.querySelector('.flex.flex-col.space-y-4');
+        var articlesContainer = document.getElementById('articles-container');
         var newArticle = document.createElement('div');
         newArticle.innerHTML = `
             <div>

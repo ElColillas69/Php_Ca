@@ -16,7 +16,7 @@ class BlogArticleController extends Controller
 
     public function create()
     {
-        $posts = Post::all(); 
+        $posts = Post::all();
         return view('blog.create', compact('posts'));
     }
 
@@ -25,15 +25,19 @@ class BlogArticleController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'id' => 'required|exists:posts,id',
+            'post_id' => 'required|exists:posts,id',
         ]);
 
+        // Create a new Article instance
         $article = new Article();
         $article->title = $request->title;
         $article->description = $request->description;
-        $article->id = $request->id;
+        $article->post_id = $request->post_id;
+        
+        // Save the article into the database
         $article->save();
 
+        // Redirect back with success message
         return redirect()->route('articles.index')
             ->with('success', 'Article created successfully.');
     }
@@ -41,7 +45,7 @@ class BlogArticleController extends Controller
     public function show($id)
     {
         $post = Post::findOrFail($id);
-        $articles = $post->articles; 
+        $articles = $post->articles;
         return view('post.show', compact('post', 'articles'));
     }
 
