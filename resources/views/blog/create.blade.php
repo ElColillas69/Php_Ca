@@ -16,7 +16,7 @@
             </ul>
         </div>
         @endif
-        <form action="{{ route('blog.store') }}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('articles.store', $post) }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-4">
                 <label for="title" class="block text-gray-700 text-sm font-bold mb-2">Title:</label>

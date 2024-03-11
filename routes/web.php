@@ -25,9 +25,12 @@ Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->nam
 
 Route::get('/blog/articles', [BlogArticlesController::class, 'index']);
 Route::get('/blog/articles/{id}', [BlogArticlesController::class, 'show']);
+Route::get('post/{post}/articles/create', 'BlogArticleController@createArticle')->name('articles.create');
 Route::get('/blog/articles/create', [BlogArticlesController::class, 'create']);
+Route::post('post/{post}/articles', 'BlogArticleController@storeArticle')->name('articles.store');
 Route::post('/blog/articles', [BlogArticlesController::class, 'store']);
 Route::get('/blog/articles/{id}/edit', [BlogArticlesController::class, 'edit']);
 Route::put('/blog/articles/{id}', [BlogArticlesController::class, 'update']);
 Route::delete('/blog/articles/{id}', [BlogArticlesController::class, 'destroy']);
+
 

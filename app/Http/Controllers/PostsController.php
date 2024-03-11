@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
+use App\Models\Article; 
 
 class PostsController extends Controller
 {
@@ -35,10 +36,10 @@ class PostsController extends Controller
 
         $request->image->move(public_path('images'), $newImageName);
 
-        Post::create([
+        $post = Post::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'slug' => \Str::slug($request->title), // Generate slug using Laravel helper
+            'slug' => \Str::slug($request->title),
             'image_path' => $newImageName,
             'user_id' => auth()->user()->id
         ]);
@@ -86,5 +87,50 @@ class PostsController extends Controller
 
         return redirect('/blog')
             ->with('message', 'Your post has been deleted!');
+    }
+
+    public function createArticle($postId)
+    {
+        $post = Post::findOrFail($postId);
+        return view('blog.create-article', compact('post'));
+    }
+
+    public function storeArticle(Request $request, $postId)
+    {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+        ]);
+
+        $article = new Article();
+        $article->title = $request->title;
+        $article->description = $request->description;
+        $article->post_id = $postId;
+        $article->save();
+
+        return redirect()->route('posts.show', ['slug' => $article->post->slug])
+            ->with('success', 'Article created successfully.');
+    }
+
+    public function editArticle($postId, $articleId)
+    {
+        $article = Article::findOrFail($articleId);
+        return view('blog.edit-article', compact('article'));
+    }
+
+    public function updateArticle(Request $request, $postId, $articleId)
+    {
+        $request->validate([
+            'title' => 'required',
+            'description' => 'required',
+        ]);
+
+        $article = Article::findOrFail($articleId);
+        $article->title = $request->title;
+        $article->description = $request->description;
+        $article->save();
+
+        return redirect()->route('posts.show', ['slug' => $article->post->slug])
+            ->with('success', 'Article updated successfully.');
     }
 }

@@ -14,37 +14,32 @@ class BlogArticleController extends Controller
         return view('blog.index', compact('articles'));
     }
 
-    public function create()
+    public function createArticle(Post $post)
+{
+    return view('blog.create-article', compact('post'));
+}
+
+public function storeArticle(Request $request, Post $post)
+{
+    $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+    ]);
+
+    $article = new Article();
+    $article->title = $request->title;
+    $article->description = $request->description;
+    $article->post_id = $post->id;
+    $article->save();
+
+    return redirect()->route('posts.show', ['slug' => $article->post->slug])
+        ->with('success', 'Article created successfully.');
+}
+
+
+    public function show($post_id)
     {
-        $posts = Post::all();
-        return view('blog.create', compact('posts'));
-    }
-
-    public function store(Request $request)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-            'post_id' => 'required|exists:posts,id',
-        ]);
-
-        // Create a new Article instance
-        $article = new Article();
-        $article->title = $request->title;
-        $article->description = $request->description;
-        $article->post_id = $request->post_id;
-        
-        // Save the article into the database
-        $article->save();
-
-        // Redirect back with success message
-        return redirect()->route('articles.index')
-            ->with('success', 'Article created successfully.');
-    }
-
-    public function show($id)
-    {
-        $post = Post::findOrFail($id);
+        $post = Post::findOrFail($post_id);
         $articles = $post->articles;
         return view('post.show', compact('post', 'articles'));
     }
