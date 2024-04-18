@@ -54,7 +54,7 @@
                     </a>
                 </div>
                 <nav class="space-x-4" aria-label="Main Navigation">
-                    <a class="no-underline @if(Request::is('/')) active @endif" href="/">Home</a>
+                    <a class="no-underline @if(Request::is('home')) active @endif" href="/home">Home</a>
                     <a class="no-underline @if(Request::is('blog')) active @endif" href="/blog">Blog</a>
                     @guest
                         <a class="no-underline @if(Request::is('login')) active @endif" href="{{ route('login') }}">{{ __('Login') }}</a>

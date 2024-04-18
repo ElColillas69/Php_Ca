@@ -1,5 +1,6 @@
 <?php
 
+// app/Models/Post.php
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -18,6 +19,10 @@ class Post extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function articles()
+    {
+        return $this->hasMany(Article::class);
+    }
     public function sluggable(): array
     {
         return [
@@ -26,10 +31,4 @@ class Post extends Model
             ]
         ];
     }
-    public function articles()
-{
-    return $this->hasMany(\App\Models\Article::class, 'id');
-}
-   
-
 }

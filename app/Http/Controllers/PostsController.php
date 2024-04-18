@@ -4,7 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Post;
-use App\Models\Article; 
+use Cviebrock\EloquentSluggable\Services\SlugService;
+use App\Models\Article;
 
 class PostsController extends Controller
 {
@@ -13,11 +14,29 @@ class PostsController extends Controller
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('blog.index')
-            ->with('posts', Post::orderBy('updated_at', 'DESC')->get());
+        $searchQuery = $request->input('query');
+    
+        if ($searchQuery) {
+           
+            $postResults = Post::where('title', 'like', '%'.$searchQuery.'%')->get();
+    
+            
+            $articleResults = Article::where('title', 'like', '%'.$searchQuery.'%')->get();
+    
+          
+            $posts = $postResults->merge($articleResults);
+        } else {
+           
+            $posts = Post::all();
+        }
+    
+        $articles = Article::all();
+    
+        return view('blog.index', compact('posts', 'articles'));
     }
+    
 
     public function create()
     {
@@ -29,7 +48,9 @@ class PostsController extends Controller
         $request->validate([
             'title' => 'required',
             'description' => 'required',
-            'image' => 'required|mimes:jpg,png,jpeg|max:5048'
+            'image' => 'required|mimes:jpg,png,jpeg|max:5048',
+            'articles.*.title' => 'required',
+            'articles.*.content' => 'required',
         ]);
 
         $newImageName = uniqid() . '-' . $request->title . '.' . $request->image->extension();
@@ -39,98 +60,123 @@ class PostsController extends Controller
         $post = Post::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'slug' => \Str::slug($request->title),
+            'slug' => SlugService::createSlug(Post::class, 'slug', $request->title),
             'image_path' => $newImageName,
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->user()->id,
         ]);
 
-        return redirect('/blog')
-            ->with('message', 'Your post has been added!');
+        foreach ($request->input('articles') as $articleData) {
+            $post->articles()->create($articleData);
+        }
+
+        return redirect('/blog')->with('message', 'Your post with articles has been added!');
+    }
+    public function showPostWithArticle($postSlug, $articleSlug)
+    {
+       
+        $post = Post::where('slug', $postSlug)->with('articles')->first();
+        $article = $post->articles->where('slug', $articleSlug)->first();
+    
+        if (!$post || !$article) {
+            abort(404); 
+        }
+    
+        return view('blog.show', compact('post', 'article'));
+    }
+    
+    public function show($postId)
+{
+    $post = Post::find($postId);
+    $articles = Article::where('post_id', $postId)->get();
+    $posts = []; // Define the $posts variable
+
+    if ($post || $articles->isNotEmpty()) {
+        return view('blog.show', compact('post', 'articles', 'posts')); // Pass the $posts variable to the view
     }
 
-    public function show($slug)
-    {
-        $post = Post::where('slug', $slug)->firstOrFail();
-        $articles = $post->articles;
-        return view('blog.show', compact('post', 'articles'));
+    abort(404);
+}
+
+
+
+
+
+public function edit($id)
+{
+    $post = Post::find($id);
+
+    if (!$post) {
+        abort(404, "Post with ID $id not found");
     }
 
-    public function edit($slug)
-    {
-        return view('blog.edit')
-            ->with('post', Post::where('slug', $slug)->first());
-    }
+    $articles = Article::where('post_id', $id)->get();
 
-    public function update(Request $request, $slug)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
+    return view('blog.edit', compact('post', 'articles'));
+}
+
+public function update(Request $request, $id)
+{
+    $request->validate([
+        'title' => 'required',
+        'description' => 'required',
+        'article_titles.*' => 'required',
+        'article_contents.*' => 'required',
+    ]);
+
+   
+    Post::where('id', $id)
+        ->update([
+            'title' => $request->input('title'),
+            'description' => $request->input('description'),
+            'user_id' => auth()->user()->id,
         ]);
 
-        Post::where('slug', $slug)
-            ->update([
-                'title' => $request->input('title'),
-                'description' => $request->input('description'),
-                'slug' => \Str::slug($request->title), 
-                'user_id' => auth()->user()->id
-            ]);
+   
+    $articleData = [];
 
-        return redirect('/blog')
-            ->with('message', 'Your post has been updated!');
+    foreach ($request->input('article_titles') as $index => $articleTitle) {
+        $articleData[] = [
+            'title' => $articleTitle,
+            'content' => $request->input('article_contents.' . $index),
+        ];
     }
 
-    public function destroy($slug)
-    {
-        $post = Post::where('slug', $slug);
-        $post->delete();
+    $post = Post::find($id);
+    $post->articles()->delete(); // Delete existing articles
 
-        return redirect('/blog')
-            ->with('message', 'Your post has been deleted!');
+    $post->articles()->createMany($articleData);
+
+    return redirect('/blog')->with('message', 'Your post and articles have been updated!');
+}
+public function likePost(Post $post)
+{
+    if (!$post->liked) {
+        $post->increment('likes');
+        $post->liked = true;
+    } else {
+        $post->decrement('likes');
+        $post->liked = false;
+    }
+    $post->save();
+
+    return response()->json(['success' => true]);
+}
+
+
+public function destroy($id)
+{
+    $post = Post::find($id);
+
+    if (!$post) {
+        abort(404, "Post with ID $id not found");
     }
 
-    public function createArticle($postId)
-    {
-        $post = Post::findOrFail($postId);
-        return view('blog.create-article', compact('post'));
-    }
+    
+    $post->articles()->delete();
 
-    public function storeArticle(Request $request, $postId)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-        ]);
+   
+    $post->delete();
 
-        $article = new Article();
-        $article->title = $request->title;
-        $article->description = $request->description;
-        $article->post_id = $postId;
-        $article->save();
-
-        return redirect()->route('posts.show', ['slug' => $article->post->slug])
-            ->with('success', 'Article created successfully.');
-    }
-
-    public function editArticle($postId, $articleId)
-    {
-        $article = Article::findOrFail($articleId);
-        return view('blog.edit-article', compact('article'));
-    }
-
-    public function updateArticle(Request $request, $postId, $articleId)
-    {
-        $request->validate([
-            'title' => 'required',
-            'description' => 'required',
-        ]);
-
-        $article = Article::findOrFail($articleId);
-        $article->title = $request->title;
-        $article->description = $request->description;
-        $article->save();
-
-        return redirect()->route('posts.show', ['slug' => $article->post->slug])
-            ->with('success', 'Article updated successfully.');
-    }
+    return redirect('/blog')->with('message', 'Your post and associated articles have been deleted!');
+}
 }

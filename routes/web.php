@@ -15,22 +15,32 @@ use App\Http\Controllers\PostsController;
 |
 */
 
-Route::get('/', [PagesController::class, 'index']);
+// Set up the default route to the login page
+Route::view('/', 'auth.login')->name('login');
+
+
+
+use App\Http\Controllers\HomeController;
+
+Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 Route::resource('/blog', PostsController::class);
+Route::get('/blog/{postSlug}/article/{articleSlug}', 'PostsController@show');
+Route::get('/blog/update/{id}', [PostController::class, 'edit']);
 
+Route::put('/blog/update/{id}', [PostsController::class, 'update']);
+
+Route::delete('/blog/update/{id}', [PostsController::class, 'destroy']);
+
+
+
+Route::get('/blog', [PostsController::class, 'index'])->name('blog.index');
+
+
+Route::get('/blog/search', [PostsController::class, 'search'])->name('blog.search');
+
+Route::post('/like/{post}', [PostsController::class, 'likePost'])->name('like.post');
+
+
+// Laravel default authentication routes
 Auth::routes();
-
-Route::get('/home', [\App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Route::get('/blog/articles', [BlogArticlesController::class, 'index']);
-Route::get('/blog/articles/{id}', [BlogArticlesController::class, 'show']);
-Route::get('post/{post}/articles/create', 'BlogArticleController@createArticle')->name('articles.create');
-Route::get('/blog/articles/create', [BlogArticlesController::class, 'create']);
-Route::post('post/{post}/articles', 'BlogArticleController@storeArticle')->name('articles.store');
-Route::post('/blog/articles', [BlogArticlesController::class, 'store']);
-Route::get('/blog/articles/{id}/edit', [BlogArticlesController::class, 'edit']);
-Route::put('/blog/articles/{id}', [BlogArticlesController::class, 'update']);
-Route::delete('/blog/articles/{id}', [BlogArticlesController::class, 'destroy']);
-
-
